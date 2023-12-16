@@ -1,0 +1,14 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+html,body,#map { height: 100%;width: 100%; }
+
+.panel{
+    position: fixed;
+    margin-left:40px ;
+    margin-top: 20px;
+    background-color: white;
+    z-index: 1000;
+    padding: 1rem;
+}

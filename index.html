@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>postcode.lk</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css"
+    />
+  </head>
+  <body>
+    <div class="panel">
+      <div class="autoComplete_wrapper">
+        <input
+          id="autoComplete"
+          type="search"
+          dir="ltr"
+          spellcheck="false"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+        />
+      </div>
+    </div>
+    <div id="map"></div>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="./main.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+    <script>
+      
+      const autoCompleteJS = new autoComplete({
+        placeHolder: "Search for Postcode...",
+        threshold: 2,
+        resultsList: {
+          maxResults: 5,
+          noResults: true,
+        },
+        data: {
+          src: async (query) => {
+            try {
+              // Fetch Data from external Source
+              const source = await fetch(`https://devapi.cc/api/locations?search=${query}`);
+              // Data should be an array of `Objects` or `Strings`
+              const data = await source.json();
+              return data;
+            } catch (error) {
+              return error;
+            }
+          },
+          // Data source 'Object' key to be searched
+          keys: ["address"],
+        },
+        resultItem: {
+          highlight: true,
+        },
+        events: {
+          input: {
+            selection: (event) => {
+              const selection = event.detail.selection.value.address;
+              autoCompleteJS.input.value = selection;
+            },
+          },
+        },
+      });
+     
+    </script>
+  </body>
+</html>
