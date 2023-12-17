@@ -1,26 +1,97 @@
-body{
+body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto';
     font-size: 11px;
 }
-html,body,#map { height: 100%;width: 100%; }
 
-.panel{
+html,
+body,
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.panel {
     position: fixed;
-    margin-left:40px ;
-    margin-top: 20px;
+    margin-top: 2%;
+    margin-left: 2%;
     background-color: white;
     z-index: 1000;
     padding: 1rem;
     border-radius: 16px;
 }
 
-ListItemText{
+ListItemText {
     font-size: small;
 }
-.not-found{
+
+.not-found {
 
     height: 20px;
 }
 
+#pcformrequest {
+    max-width: 390px;
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+    /* Your styles for extra small screens go here */
+    #pcformrequest {
+        max-width: 19rem;
+    }
+
+    .panel {
+        margin-top: 5%;
+        margin-left: 25%;
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+    /* Your styles for extra small screens go here */
+    #pcformrequest {
+        max-width: 19rem;
+    }
+
+    .panel {
+        margin-top: 5%;
+        margin-left: 25%;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 601px) and (max-width: 768px) {
+
+    /* Your styles for small screens go here */
+    #pcformrequest {
+        max-width: 19rem;
+    }
+
+    .panel {
+        margin-top: 5%;
+        margin-left: 15%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+    /* Your styles for medium screens go here */
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    /* Your styles for large screens go here */
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1201px) {
+    /* Your styles for extra large screens go here */
+    .panel {
+        position: fixed;
+        margin-top: 2%;
+        margin-left: 2%;
+    }
+}

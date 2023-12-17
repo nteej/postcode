@@ -146,20 +146,21 @@
         width: 18rem
     }
 }
-.no_result{
-    height: 30px;
-    
+.autoComplete_wrapper>.no_result{
+    height: 130px;
+    padding:10px;
+    font: 12pt;
 }
-.no_result>span>.not_found{
+.autoComplete_wrapper>.no_result>span>.not_found{
     padding: .5rem;
     font: 12px;
 }
 /*# sourceMappingURL=/sm/e81ce8f7addf065a61ccd811ac8dda3ac35badd83cf93c0a06ac1f8ee3879152.map */
 
-.menu{
+.autoComplete_wrapper>.menu{
     width: 100%;
 }
-.my_postcode{
+.autoComplete_wrapper>.my_postcode{
     
     text-align: center;
     font: 12px;
