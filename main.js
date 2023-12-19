@@ -1,4 +1,5 @@
 
+var baseurl = "http://localhost:4000/";
 var map = L.map('map', {
     center: [6.8711724, 79.9237776],
     zoom: 13,
@@ -14,6 +15,10 @@ L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
     //foo: 'bar',
     //attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+L.control.zoom({
+    position: 'bottomright'
+}).addTo(map);
+L.control.scale({ position: 'bottomleft' }).addTo(map);
 
 var postcode = L.icon({
     iconUrl: './favicon.ico',
@@ -23,6 +28,11 @@ var marker = L.marker([6.8711724, 79.9237776], {
     icon: postcode,
     draggable: true
 }).addTo(map);
+
+//L.circle([6.8711724, 79.9237776],{radius:100}).addTo(map);
+var intimessage = "Drag me to position your address with coordination.";
+marker.bindPopup(intimessage).openPopup();
+
 marker.on('dragend', function (e) {
     console.log(marker);
     var lat = marker.getLatLng().lat;//.toFixed(8);
@@ -48,7 +58,9 @@ function setMarker(latLng, zoom) {
     const lng = parseFloat(longitude);
     var newLatLng = new L.LatLng(lat, lng);
     marker.setLatLng(newLatLng);
+    //L.circle(newLatLng,{radius:100}).addTo(map);
     map.setView([lat, lng], zoom);
+
 }
 
 function getAddressFromCoordinates(lat, lng, marker) {
@@ -84,7 +96,7 @@ const autoCompleteJS = new autoComplete({
             }
         },
         // Data source 'Object' key to be searched
-        keys: ["address"],
+        keys: ["location"],
     },
     resultItem: {
         highlight: true,

@@ -95,3 +95,25 @@ ListItemText {
         margin-left: 2%;
     }
 }
+
+.btn-primary {
+    --bs-btn-color: #fff!important;
+    --bs-btn-bg: #9747FF!important;
+    --bs-btn-border-color: #6c01f8!important;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #9f61ef!important;
+    --bs-btn-hover-border-color: #9f61ef!important;
+    --bs-btn-focus-shadow-rgb: 49,132,253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #6028a8!important;
+    --bs-btn-active-border-color: #5408b9!important;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #c2a8e5!important;
+    --bs-btn-disabled-border-color: #c2a8e5!important;
+}
+#pcformrequest{
+    font-size: 13px;
+    font-weight: 500;
+    
+}

@@ -146,23 +146,3 @@
         width: 18rem
     }
 }
-.autoComplete_wrapper>.no_result{
-    height: 130px;
-    padding:10px;
-    font: 12pt;
-}
-.autoComplete_wrapper>.no_result>span>.not_found{
-    padding: .5rem;
-    font: 12px;
-}
-/*# sourceMappingURL=/sm/e81ce8f7addf065a61ccd811ac8dda3ac35badd83cf93c0a06ac1f8ee3879152.map */
-
-.autoComplete_wrapper>.menu{
-    width: 100%;
-}
-.autoComplete_wrapper>.my_postcode{
-    
-    text-align: center;
-    font: 12px;
-    padding: 10px;
-}
