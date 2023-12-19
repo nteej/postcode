@@ -122,7 +122,7 @@ const autoCompleteJS = new autoComplete({
     events: {
         input: {
             selection: (event) => {
-                const selection = event.detail.selection.value.address;
+                const selection = event.detail.selection.value.location;
                 let latLng = event.detail.selection.value.lat_long;
                 document.getElementById('lat_long').value = latLng;
                 autoCompleteJS.input.value = selection;
