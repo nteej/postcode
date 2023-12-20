@@ -14,17 +14,14 @@ body,
 
 .panel {
     position: fixed;
-    margin-top: 2%;
-    margin-left: 2%;
+    margin-top: 1%;
+    margin-left: 1%;
     background-color: white;
     z-index: 1000;
     padding: 1rem;
     border-radius: 16px;
 }
 
-ListItemText {
-    font-size: small;
-}
 
 .not-found {
 
@@ -53,12 +50,12 @@ ListItemText {
 
     /* Your styles for extra small screens go here */
     #pcformrequest {
-        max-width: 19rem;
+        max-width: 20rem;
     }
 
     .panel {
         margin-top: 5%;
-        margin-left: 25%;
+        margin-left: 10%;
     }
 }
 

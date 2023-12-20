@@ -28,6 +28,21 @@ var marker = L.marker([6.8711724, 79.9237776], {
     icon: postcode,
     draggable: true
 }).addTo(map);
+navigator.geolocation.getCurrentPosition(function (position) {
+    console.log(position);
+    const { coords: { latitude, longitude } } = position;
+    getAddressFromCoordinates(latitude, longitude, marker);
+    marker.setLatLng([latitude, longitude])
+    map.setView([latitude, longitude], 13)
+    document.getElementById('lat_long').value = latitude + ',' + longitude;
+    document.getElementById('address').value = latitude + ',' + longitude;
+    //console.log(marker);
+}, function (error) {
+    if (error.code == error.PERMISSION_DENIED)
+        console.log("Location permission not allowed.");
+});
+
+
 
 //L.circle([6.8711724, 79.9237776],{radius:100}).addTo(map);
 var intimessage = "Drag me to position your address with coordination.";
@@ -43,13 +58,14 @@ marker.on('dragend', function (e) {
     if (czoom != 18) { map.setView([lat, lng], nzoom); } else { map.setView([lat, lng]); }
     document.getElementById('latitude').value = lat;
     document.getElementById('longitude').value = lng;
+    document.getElementById('lat_long').value = lat + ',' + lng;
     getAddressFromCoordinates(lat, lng, marker);
 
 
 
 });
 
-function setMarker(latLng, zoom) {
+function setMarker(latLng, zoom, intimessage) {
     // Split the string into an array using the comma as a separator
     const [latitude, longitude] = latLng.split(',');
 
@@ -59,6 +75,7 @@ function setMarker(latLng, zoom) {
     var newLatLng = new L.LatLng(lat, lng);
     marker.setLatLng(newLatLng);
     //L.circle(newLatLng,{radius:100}).addTo(map);
+    marker.bindPopup(intimessage).openPopup();
     map.setView([lat, lng], zoom);
 
 }
@@ -126,8 +143,10 @@ const autoCompleteJS = new autoComplete({
                 let latLng = event.detail.selection.value.lat_long;
                 document.getElementById('lat_long').value = latLng;
                 autoCompleteJS.input.value = selection;
-                setMarker(latLng, 18);
-
+                setMarker(latLng, 18, selection);
+                document.getElementById('address').value = selection;
+                //const [lat, lng] = latLng.split(',');
+                //getAddressFromCoordinates(lat, lng, marker);
             },
         },
     },
@@ -152,3 +171,58 @@ const autoCompleteJS = new autoComplete({
         }, false)
     })
 })()
+function send(e, form) {
+    if (!form.checkValidity()) {
+        showAlerts('fail',  'Please fill the missing values before submit.');
+        console.log('validation fails');
+        e.preventDefault()
+        e.stopPropagation()
+    } else {
+        fetch(form.action, { method: 'post', body: new FormData(form) })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network error');
+                }
+                return response.json();
+            })
+            .then((json) => {
+                console.log(json.id);
+                if (json.id > 0) {
+                    showAlerts('success', 'New PostCode requested sucessfully.Your registered postcode will be available with 5 working days.');
+                    form.reset();
+                    form.classList.remove('was-validated');
+                    // document.getElementById("address").value='';
+                    // document.getElementById("customer").value='';
+                    // document.getElementById("lat_long").value='';
+                }
+
+            })
+            .catch(error => {
+                if (error instanceof TypeError && error.message) {
+                    console.error('Error occured: ', error);
+                } else {
+                    console.error('There was a problem with the Fetch operation:', error);
+                }
+                showAlerts('fail',  error);
+            });
+
+
+        e.preventDefault();
+    }
+
+}
+function showAlerts(type, message) {
+    if (type == "success") {
+        document.getElementById('notification').classList.add('alert-success');
+
+    } else if (type == "fail") {
+        document.getElementById('notification').classList.add('alert-danger');
+    }
+    else {
+        document.getElementById('notification').classList.add('alert-primary');
+    }
+    document.getElementById("notification").innerHTML = message;
+    document.getElementById('notification').style.display = 'block';
+    setTimeout(function () { document.getElementById('notification').style.display = 'none' }, 3000);
+
+}
