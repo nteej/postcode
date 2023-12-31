@@ -68,7 +68,7 @@ marker.on('dragend', function (e) {
 function setMarker(latLng, zoom, intimessage) {
     // Split the string into an array using the comma as a separator
     const [latitude, longitude] = latLng.split(',');
-
+    $("#google-map").attr("href", "https://www.google.com/maps/dir/?api=1&destination="+latLng);
     // Convert the values to numbers if needed
     const lat = parseFloat(latitude);
     const lng = parseFloat(longitude);
@@ -94,7 +94,7 @@ function getAddressFromCoordinates(lat, lng, marker) {
         });
 }
 const autoCompleteJS = new autoComplete({
-    placeHolder: "Search for Postcode...",
+    placeHolder: "Search your address here ...",
     threshold: 2,
     resultsList: {
         maxResults: 10,
@@ -125,12 +125,16 @@ const autoCompleteJS = new autoComplete({
                 const message = document.createElement("div");
                 message.setAttribute("class", "no_result");
                 // Add message text content
-                message.innerHTML = `<span class="not_found">Found No Results for "${data.query}"</span>`;
+                message.innerHTML = `<span style="padding:0px" class="not_found"><p style="padding:3px">Your searched address "${data.query}" is not available. Would you like to request now?</p><a href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;border:1px solid black;padding:2px;background:rgb(33, 190, 109);width:50px;border-radius:5px">Yes</a> </span>`;
                 // Add message list element to the list
                 list.appendChild(message);
-                const bsCollapse = new bootstrap.Collapse('#pcrequest', {
-                    show: true
-                })
+               // $("#btndivform").hide();
+                //const bsCollapse = new bootstrap.Collapse('#pcrequest', {
+                //    show: true
+                //})
+               
+              
+            
 
             }
         },
@@ -223,6 +227,30 @@ function showAlerts(type, message) {
     }
     document.getElementById("notification").innerHTML = message;
     document.getElementById('notification').style.display = 'block';
-    setTimeout(function () { document.getElementById('notification').style.display = 'none' }, 3000);
+    setTimeout(function () { document.getElementById('notification').style.display = 'none' }, 5000);
 
 }
+
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.has('locate')){
+    const postcode = urlParams.get('locate');
+    $lat_long=locate(postcode);
+    console.log(postcode);
+}
+
+function locate(postcode){
+    fetch("http://127.0.0.1:7000/api/locate?postcode="+postcode)
+    .then((response) => response.json())
+    .then((json) => {
+        setMarker(json.lat_long, 14, "<b>"+json.customer+"</b></br>"+json.address);
+    })
+    .catch(error => {
+        console.error('Error fetching postcode:', error);
+    });
+}
+document.body.addEventListener("click", function (evt) {
+    console.dir(this);
+    //note evt.target can be a nested element, not the body element, resulting in misfires
+    console.log(evt.target);
+    map.closePopup();
+},true);

@@ -22,6 +22,29 @@ body,
     border-radius: 16px;
 }
 
+input::placeholder {
+    color: rgb(153, 155, 154)!important;
+    transition: all .3s ease;
+    -webkit-transition: all -webkit-transform .3s ease;
+
+}
+textarea::placeholder {
+    color: rgb(142, 141, 141)!important;
+    transition: all .3s ease;
+    -webkit-transition: all -webkit-transform .3s ease;
+
+}
+
+input:hover::placeholder {
+    color: rgb(191, 190, 190)!important;
+    transition: all .3s ease;
+    -webkit-transition: all -webkit-transform .3s ease;
+}
+textarea:hover::placeholder {
+    color: rgb(191, 190, 190)!important;
+    transition: all .3s ease;
+    -webkit-transition: all -webkit-transform .3s ease;
+}
 
 .not-found {
 
@@ -31,6 +54,7 @@ body,
 #pcformrequest {
     max-width: 390px;
 }
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 
@@ -85,6 +109,7 @@ body,
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1201px) {
+
     /* Your styles for extra large screens go here */
     .panel {
         position: fixed;
@@ -94,23 +119,24 @@ body,
 }
 
 .btn-primary {
-    --bs-btn-color: #fff!important;
-    --bs-btn-bg: #9747FF!important;
-    --bs-btn-border-color: #6c01f8!important;
+    --bs-btn-color: #fff !important;
+    --bs-btn-bg: #9747FF !important;
+    --bs-btn-border-color: #6c01f8 !important;
     --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #9f61ef!important;
-    --bs-btn-hover-border-color: #9f61ef!important;
-    --bs-btn-focus-shadow-rgb: 49,132,253;
+    --bs-btn-hover-bg: #9f61ef !important;
+    --bs-btn-hover-border-color: #9f61ef !important;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
     --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #6028a8!important;
-    --bs-btn-active-border-color: #5408b9!important;
+    --bs-btn-active-bg: #6028a8 !important;
+    --bs-btn-active-border-color: #5408b9 !important;
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --bs-btn-disabled-color: #fff;
-    --bs-btn-disabled-bg: #c2a8e5!important;
-    --bs-btn-disabled-border-color: #c2a8e5!important;
+    --bs-btn-disabled-bg: #c2a8e5 !important;
+    --bs-btn-disabled-border-color: #c2a8e5 !important;
 }
-#pcformrequest{
+
+#pcformrequest {
     font-size: 13px;
     font-weight: 500;
-    
+
 }
