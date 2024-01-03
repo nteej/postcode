@@ -242,7 +242,12 @@ function locate(postcode){
     fetch("http://127.0.0.1:7000/api/locate?postcode="+postcode)
     .then((response) => response.json())
     .then((json) => {
-        setMarker(json.lat_long, 14, "<b>"+json.customer+"</b></br>"+json.address);
+        if(json){
+            setMarker(json.lat_long, 14, "<b>"+json.customer+"</b></br>"+json.address);
+        }else{
+            
+        }
+        
     })
     .catch(error => {
         console.error('Error fetching postcode:', error);
