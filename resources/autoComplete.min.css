@@ -20,9 +20,18 @@
 
 .autoComplete_wrapper {
     display: inline-block;
-    position: relative
+    position: relative;
 }
-
+.autoComplete_wrapper #navigate {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust the value based on the desired spacing */
+    transform: translateY(-50%);
+    color: #9747FF; /* Icon color */
+}
+.autoComplete_wrapper>input {
+    padding-right: 30px; /* Adjust the value based on the icon width and desired spacing */
+}
 .autoComplete_wrapper>input {
     height: 3rem;
     width: 370px;
@@ -145,4 +154,7 @@
     .autoComplete_wrapper>input {
         width: 18rem
     }
+}
+.no_result{
+    padding: 5px;
 }

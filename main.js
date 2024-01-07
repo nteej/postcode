@@ -45,8 +45,8 @@ navigator.geolocation.getCurrentPosition(function (position) {
 
 
 //L.circle([6.8711724, 79.9237776],{radius:100}).addTo(map);
-var intimessage = "Drag me to position your address with coordination.";
-marker.bindPopup(intimessage).openPopup();
+//var intimessage = "Drag me to position your address with coordination.";
+//marker.bindPopup(intimessage).openPopup();
 
 marker.on('dragend', function (e) {
     console.log(marker);
@@ -69,6 +69,7 @@ function setMarker(latLng, zoom, intimessage) {
     // Split the string into an array using the comma as a separator
     const [latitude, longitude] = latLng.split(',');
     $("#google-map").attr("href", "https://www.google.com/maps/dir/?api=1&destination="+latLng);
+    $("#navigate").attr("href","https://www.google.com/maps/dir/?api=1&destination="+latLng);
     // Convert the values to numbers if needed
     const lat = parseFloat(latitude);
     const lng = parseFloat(longitude);
@@ -125,7 +126,7 @@ const autoCompleteJS = new autoComplete({
                 const message = document.createElement("div");
                 message.setAttribute("class", "no_result");
                 // Add message text content
-                message.innerHTML = `<span style="padding:0px" class="not_found"><p style="padding:3px">Your searched address "${data.query}" is not available. Would you like to request now?</p><a href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;border:1px solid black;padding:2px;background:rgb(33, 190, 109);width:50px;border-radius:5px">Yes</a> </span>`;
+                message.innerHTML = `<span><p>Your searched address "${data.query}" is not available. Would you like to request now?</p><a onclick="hideMessage()" class="btn btn-primary" href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;padding:2px;min-width:100px;height:30px">Yes</a> </span>`;
                 // Add message list element to the list
                 list.appendChild(message);
                // $("#btndivform").hide();
@@ -239,7 +240,7 @@ if(urlParams.has('locate')){
 }
 
 function locate(postcode){
-    fetch("http://127.0.0.1:7000/api/locate?postcode="+postcode)
+    fetch("https://devapi.cc/api/locate?postcode="+postcode)
     .then((response) => response.json())
     .then((json) => {
         if(json){
@@ -259,3 +260,7 @@ document.body.addEventListener("click", function (evt) {
     console.log(evt.target);
     map.closePopup();
 },true);
+
+function hideMessage(){
+    $(".no_result").hide();
+}

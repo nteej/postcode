@@ -23,112 +23,127 @@
 
 <body>
   <div class="panel">
-    
-    <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Search</button>
-        <button class="nav-link" id="nav-postcode-tab" data-bs-toggle="tab" data-bs-target="#nav-postcode" type="button" role="tab" aria-controls="nav-postcode" aria-selected="false">Postcode</button>
-        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Share</button>
-        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Navigate</button>
-      </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-        <div class="autoComplete_wrapper" style="margin-top: 1%;">
-          <input id="autoComplete" type="search" dir="ltr" spellcheck="false" autocorrect="off" autocomplete="off"
-            autocapitalize="off" />
-        </div>
-        <form class="row g-3 needs-validation" action="https://www.postalcode.lk/api/v2/postcode" method="post" id="pcformrequest" onsubmit="send(event,this)" novalidate >
-          <input id="lat_long" name="lat_long" type="hidden" />
-                    
-          <div class="container-fluid" style="margin-top: 20px;">
-            <div id="notification" class="alert" role="alert" style="display:none">
-              
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <label><img src="./resources/images/logo.png" style="height: 20px;">postcode.lk</label>
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Search</button>
+                <button class="nav-link" id="nav-postcode-tab" data-bs-toggle="tab" data-bs-target="#nav-postcode" type="button" role="tab" aria-controls="nav-postcode" aria-selected="false">Postcode</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Share</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Navigate</button>
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                <div class="autoComplete_wrapper" style="margin-top: 1%;">
+                  <input id="autoComplete" type="search" dir="ltr" spellcheck="false" autocorrect="off" autocomplete="off"
+                    autocapitalize="off" />
+                    <a id="navigate" href="#" target="_blank"><i class="fa fa-directions" aria-hidden="true"></i></a>
+                </div>
+                <form class="row g-3 needs-validation" action="https://www.postalcode.lk/api/v2/postcode" method="post" id="pcformrequest" onsubmit="send(event,this)" novalidate >
+                  <input id="lat_long" name="lat_long" type="hidden" />
+                            
+                  <div class="container-fluid" style="margin-top: 20px;">
+                    <div id="notification" class="alert" role="alert" style="display:none">
+                      
+                    </div>
+                    <div class="collapse" id="pcrequest">
+            
+                      <hr class="hr" />
+                      <div class="mb-3">
+                        <label for="contact" class="form-label">Contact No/Email</label>
+                        <input type="text" class="form-control" id="contact" name="contact"
+                          placeholder="0771234567/yournname@gmail.com" required>
+                        <div class="valid-feedback">
+                          Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                          Please type your name or location name
+                        </div>
+            
+                      </div>
+                      <div class="mb-3">
+                        <label for="customer" class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="customer" name="customer"
+                          placeholder="Customer Name/Ranolak Solutions pvt Ltd." required>
+                        <div class="valid-feedback">
+                          Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                          Please type your name or location name
+                        </div>
+            
+                      </div>
+                      
+                      <div class="mb-3">
+                        <label for="address" class="form-label">Your Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="5"
+                          placeholder="No 100,Temple Rd,Kalutara" required></textarea>
+                        <div class="valid-feedback">
+                          Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                          Type your address here ...
+                        </div>
+                      </div>
+                      
+                      <div class="mb-3">
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary mb-3">Request Post-Code</button>
+                        </div>
+                      </div>
+            
+                    </div>
+            
+                  </div>
+                </form>
+              </div>
+              <div class="tab-pane fade" id="nav-postcode" role="tabpanel" aria-labelledby="nav-postcode-tab" tabindex="0">
+                <div class="row">
+                  <div class="card mb-3" style="max-width: 406px;">
+                    <div class="row g-0">
+                      <div class="col-md-4">
+                        <img src="./resources/images/header.png" class="img-fluid rounded-start" alt="...">
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body">
+                          <h5 class="card-title">GIS services for digital transformation</h5>
+                          <p class="card-text">Uniquly Sri Lankan services aimed at streamlining the location based services within the Island. BFI,NBFIs, Fintechs & Logistics solutions providers can levrage on the technology to develop the next set of digital transfromational tools and expericences. </p>
+                          <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                <div class="container-fluid">
+                  <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">This is an example of what you'll share</label>
+                    <input type="text" class="form-control" id="customer" name="customer"
+                      value="https://www.postcode.lk?locate=KT2 1DG" >
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+                <a style="margin-top: 10px;" class="btn btn-primary" id="google-map" href="#" target="_blank">Google Maps</i>
+                </a>
+              </div>
+              <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
             </div>
-            <div class="collapse" id="pcrequest">
-    
-              <hr class="hr" />
-              <div class="mb-3">
-                <label for="contact" class="form-label">Contact No/Email</label>
-                <input type="text" class="form-control" id="contact" name="contact"
-                  placeholder="0771234567/yournname@gmail.com" required>
-                <div class="valid-feedback">
-                  Looks good!
-                </div>
-                <div class="invalid-feedback">
-                  Please type your name or location name
-                </div>
-    
-              </div>
-              <div class="mb-3">
-                <label for="customer" class="form-label">Your Name</label>
-                <input type="text" class="form-control" id="customer" name="customer"
-                  placeholder="Customer Name/Ranolak Solutions pvt Ltd." required>
-                <div class="valid-feedback">
-                  Looks good!
-                </div>
-                <div class="invalid-feedback">
-                  Please type your name or location name
-                </div>
-    
-              </div>
-              
-              <div class="mb-3">
-                <label for="address" class="form-label">Your Address</label>
-                <textarea class="form-control" id="address" name="address" rows="5"
-                  placeholder="No 100,Temple Rd,Kalutara" required></textarea>
-                <div class="valid-feedback">
-                  Looks good!
-                </div>
-                <div class="invalid-feedback">
-                  Type your address here ...
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary mb-3">Request Post-Code</button>
-                </div>
-              </div>
-    
-            </div>
-    
-          </div>
-        </form>
-      </div>
-      <div class="tab-pane fade" id="nav-postcode" role="tabpanel" aria-labelledby="nav-postcode-tab" tabindex="0">
-        <div class="row">
-          <div class="card mb-3" style="max-width: 406px;">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="./resources/images/header.png" class="img-fluid rounded-start" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">GIS services for digital transformation</h5>
-                  <p class="card-text">Uniquly Sri Lankan services aimed at streamlining the location based services within the Island. BFI,NBFIs, Fintechs & Logistics solutions providers can levrage on the technology to develop the next set of digital transfromational tools and expericences. </p>
-                  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-        <div class="container-fluid">
-          <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">This is an example of what you'll share</label>
-            <input type="text" class="form-control" id="customer" name="customer"
-              value="https://www.postcode.lk?locate=KT2 1DG" >
-          </div>
-        </div>
       </div>
-      <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-        <a style="margin-top: 10px;" class="btn btn-primary" id="google-map" href="#" target="_blank">Google Maps</i>
-        </a>
-      </div>
-      <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
-    </div>
+    
+    
     
     <div  id="info">
       <input id="latitude" type="hidden" />
