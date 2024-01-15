@@ -22,7 +22,7 @@
 </head>
 
 <body>
-  <div class="panel">
+  <div class="panel" id="infopanel">
     <div class="accordion" id="accordionExample">
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
@@ -47,7 +47,7 @@
                     autocapitalize="off" />
                     <a id="navigate" href="#" target="_blank"><i class="fa fa-directions" aria-hidden="true"></i></a>
                 </div>
-                <form class="row g-3 needs-validation" action="https://www.postalcode.lk/api/v2/postcode" method="post" id="pcformrequest" onsubmit="send(event,this)" novalidate >
+                <form class="row g-3 needs-validation" style="overflow-y: visible;" action="https://www.postalcode.lk/api/v2/postcode" method="post" id="pcformrequest" onsubmit="send(event,this)" novalidate >
                   <input id="lat_long" name="lat_long" type="hidden" />
                             
                   <div class="container-fluid" style="margin-top: 20px;">
@@ -83,9 +83,9 @@
                       </div>
                       
                       <div class="mb-3">
-                        <label for="address" class="form-label">Your Address</label>
+                        <label for="address" class="form-label">Requested Address</label>
                         <textarea class="form-control" id="address" name="address" rows="5"
-                          placeholder="No 100,Temple Rd,Kalutara" required></textarea>
+                          placeholder="" required></textarea>
                         <div class="valid-feedback">
                           Looks good!
                         </div>

@@ -20,6 +20,9 @@ body,
     z-index: 1000;
     padding: 1rem;
     border-radius: 16px;
+    overflow-y: scroll;
+    min-height: 300px;
+    max-height: 500px;
 }
 
 input::placeholder {
@@ -53,6 +56,9 @@ textarea:hover::placeholder {
 
 #pcformrequest {
     max-width: 390px;
+    font-size: 13px;
+    font-weight: 500;
+    overflow-y: scroll;
 }
 
 /* Extra small devices (phones, 600px and down) */
@@ -133,10 +139,4 @@ textarea:hover::placeholder {
     --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: #c2a8e5 !important;
     --bs-btn-disabled-border-color: #c2a8e5 !important;
-}
-
-#pcformrequest {
-    font-size: 13px;
-    font-weight: 500;
-
 }

@@ -126,7 +126,7 @@ const autoCompleteJS = new autoComplete({
                 const message = document.createElement("div");
                 message.setAttribute("class", "no_result");
                 // Add message text content
-                message.innerHTML = `<span><p>Your searched address "${data.query}" is not available. Would you like to request now?</p><a onclick="hideMessage()" class="btn btn-primary" href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;padding:2px;min-width:100px;height:30px">Yes</a> </span>`;
+                message.innerHTML = `<span><p>Your searched address "${data.query}" is not available. Would you like to request now?</p><a id="btnPCRequest" tabindex="1" onclick="hideMessage()" class="btn btn-primary" href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;padding:2px;min-width:100px;height:30px">Yes</a> </span>`;
                 // Add message list element to the list
                 list.appendChild(message);
                // $("#btndivform").hide();
@@ -134,7 +134,7 @@ const autoCompleteJS = new autoComplete({
                 //    show: true
                 //})
                
-              
+                $('#btnPCRequest').focus();
             
 
             }
@@ -192,7 +192,7 @@ function send(e, form) {
             })
             .then((json) => {
                 console.log(json.id);
-                if (json.id > 0) {
+                if (json.data.id > 0) {
                     showAlerts('success', 'New PostCode requested sucessfully.Your registered postcode will be available with 5 working days.');
                     form.reset();
                     form.classList.remove('was-validated');
@@ -255,12 +255,13 @@ function locate(postcode){
     });
 }
 document.body.addEventListener("click", function (evt) {
-    console.dir(this);
+    //console.dir(this);
     //note evt.target can be a nested element, not the body element, resulting in misfires
-    console.log(evt.target);
+    //console.log(evt.target);
     map.closePopup();
 },true);
 
 function hideMessage(){
     $(".no_result").hide();
 }
+$("#infopanel").scrollTop($("#infopanel")[0].scrollHeight);
