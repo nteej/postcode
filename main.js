@@ -222,6 +222,7 @@ function showAlerts(type, message) {
 
     } else if (type == "fail") {
         document.getElementById('notification').classList.add('alert-danger');
+        type = "";
     }
     else {
         document.getElementById('notification').classList.add('alert-primary');
