@@ -35,7 +35,7 @@ navigator.geolocation.getCurrentPosition(function (position) {
     marker.setLatLng([latitude, longitude])
     map.setView([latitude, longitude], 13)
     document.getElementById('lat_long').value = latitude + ',' + longitude;
-    document.getElementById('address').value = latitude + ',' + longitude;
+   // document.getElementById('address').value = latitude + ',' + longitude;
     //console.log(marker);
 }, function (error) {
     if (error.code == error.PERMISSION_DENIED)
@@ -88,7 +88,7 @@ function getAddressFromCoordinates(lat, lng, marker) {
             // console.log(json.results[0].formatted_address);
             marker.bindPopup(json.display_name).openPopup();
             // marker.bindPopup("Lat " + lat + "<br />Lon " + lng + "</br>address " + json.results[0].formatted_address).openPopup();
-            document.getElementById('address').value = json.display_name;
+           // document.getElementById('address').value = json.display_name;
         })
         .catch(error => {
             console.error('Error fetching address:', error);
@@ -96,7 +96,7 @@ function getAddressFromCoordinates(lat, lng, marker) {
 }
 const autoCompleteJS = new autoComplete({
     placeHolder: "Search your address here ...",
-    threshold: 2,
+    threshold: 5,
     resultsList: {
         maxResults: 10,
         noResults: true,
@@ -105,7 +105,7 @@ const autoCompleteJS = new autoComplete({
         src: async (query) => {
             try {
                 // Fetch Data from external Source
-                const source = await fetch(`https://devapi.cc/api/locations?search=${query}`);
+                const source = await fetch(`https://www.postalcode.lk/api/v2/locations?search=${query}`);
                 // Data should be an array of `Objects` or `Strings`
                 const data = await source.json();
                 return data;
@@ -241,7 +241,7 @@ if(urlParams.has('locate')){
 }
 
 function locate(postcode){
-    fetch("https://devapi.cc/api/locate?postcode="+postcode)
+    fetch("https://www.postalcode.lk/api/v2/locate?postcode="+postcode)
     .then((response) => response.json())
     .then((json) => {
         if(json){
