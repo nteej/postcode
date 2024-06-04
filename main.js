@@ -1,99 +1,90 @@
+const baseurl = "http://localhost:4000/";
 
-var baseurl = "http://localhost:4000/";
-var map = L.map('map', {
+// Initialize the Leaflet map
+const map = L.map('map', {
     center: [6.8711724, 79.9237776],
     zoom: 13,
     zoomControl: false,
     attributionControl: false
 });
-var nzoom = 12;
 
+const nzoom = 12;
 
+// Add Google Maps tile layer
 L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
     maxZoom: 20,
     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    //foo: 'bar',
-    //attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-L.control.zoom({
-    position: 'bottomright'
-}).addTo(map);
+
+// Add zoom and scale controls
+L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.control.scale({ position: 'bottomleft' }).addTo(map);
 
-var postcode = L.icon({
+// Define the marker icon
+const postcodeIcon = L.icon({
     iconUrl: './favicon.ico',
     iconSize: [50, 50]
 });
-var marker = L.marker([6.8711724, 79.9237776], {
-    icon: postcode,
+
+// Initialize the marker
+const marker = L.marker([6.8711724, 79.9237776], {
+    icon: postcodeIcon,
     draggable: true
 }).addTo(map);
-navigator.geolocation.getCurrentPosition(function (position) {
-    console.log(position);
-    const { coords: { latitude, longitude } } = position;
-    getAddressFromCoordinates(latitude, longitude, marker);
-    marker.setLatLng([latitude, longitude])
-    map.setView([latitude, longitude], 13)
-    document.getElementById('lat_long').value = latitude + ',' + longitude;
-   // document.getElementById('address').value = latitude + ',' + longitude;
-    //console.log(marker);
-}, function (error) {
-    if (error.code == error.PERMISSION_DENIED)
-        console.log("Location permission not allowed.");
-});
 
+// Get current geolocation and update the map
+navigator.geolocation.getCurrentPosition(onGeolocationSuccess, onGeolocationError);
 
-
-//L.circle([6.8711724, 79.9237776],{radius:100}).addTo(map);
-//var intimessage = "Drag me to position your address with coordination.";
-//marker.bindPopup(intimessage).openPopup();
-
-marker.on('dragend', function (e) {
-    console.log(marker);
-    var lat = marker.getLatLng().lat;//.toFixed(8);
-    var lng = marker.getLatLng().lng;//.toFixed(8);
-    var czoom = map.getZoom();
-    if (czoom < 18) { nzoom = czoom + 2; }
-    if (nzoom > 18) { nzoom = 18; }
-    if (czoom != 18) { map.setView([lat, lng], nzoom); } else { map.setView([lat, lng]); }
-    document.getElementById('latitude').value = lat;
-    document.getElementById('longitude').value = lng;
-    document.getElementById('lat_long').value = lat + ',' + lng;
-    getAddressFromCoordinates(lat, lng, marker);
-
-
-
-});
-
-function setMarker(latLng, zoom, intimessage) {
-    // Split the string into an array using the comma as a separator
-    const [latitude, longitude] = latLng.split(',');
-    $("#google-map").attr("href", "https://www.google.com/maps/dir/?api=1&destination="+latLng);
-    $("#navigate").attr("href","https://www.google.com/maps/dir/?api=1&destination="+latLng);
-    // Convert the values to numbers if needed
-    const lat = parseFloat(latitude);
-    const lng = parseFloat(longitude);
-    var newLatLng = new L.LatLng(lat, lng);
-    marker.setLatLng(newLatLng);
-    //L.circle(newLatLng,{radius:100}).addTo(map);
-    marker.bindPopup(intimessage).openPopup();
-    map.setView([lat, lng], zoom);
-
+// Geolocation success callback
+function onGeolocationSuccess(position) {
+    const { latitude, longitude } = position.coords;
+    setMarkerPosition(latitude, longitude, marker);
+    map.setView([latitude, longitude], 13);
+    document.getElementById('lat_long').value = `${latitude},${longitude}`;
 }
 
+// Geolocation error callback
+function onGeolocationError(error) {
+    if (error.code === error.PERMISSION_DENIED) {
+        console.log("Location permission not allowed.");
+    }
+}
+
+// Handle marker drag end event
+marker.on('dragend', function () {
+    const { lat, lng } = marker.getLatLng();
+    const currentZoom = map.getZoom();
+    const newZoom = Math.min(currentZoom + 2, 18);
+
+    map.setView([lat, lng], currentZoom !== 18 ? newZoom : currentZoom);
+
+    document.getElementById('latitude').value = lat;
+    document.getElementById('longitude').value = lng;
+    document.getElementById('lat_long').value = `${lat},${lng}`;
+
+    getAddressFromCoordinates(lat, lng, marker);
+});
+
+// Function to set marker position and update the map view
+function setMarkerPosition(lat, lng, marker) {
+    const newLatLng = new L.LatLng(lat, lng);
+    marker.setLatLng(newLatLng);
+    map.setView(newLatLng, map.getZoom());
+}
+
+// Function to get address from coordinates using Nominatim API
 function getAddressFromCoordinates(lat, lng, marker) {
-    fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + lat + "&lon=" + lng)
-        .then((response) => response.json())
-        .then((json) => {
-            // console.log(json.results[0].formatted_address);
-            marker.bindPopup(json.display_name).openPopup();
-            // marker.bindPopup("Lat " + lat + "<br />Lon " + lng + "</br>address " + json.results[0].formatted_address).openPopup();
-           // document.getElementById('address').value = json.display_name;
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+        .then(response => response.json())
+        .then(data => {
+            marker.bindPopup(data.display_name).openPopup();
         })
         .catch(error => {
             console.error('Error fetching address:', error);
         });
 }
+
+// Initialize autocomplete for address search
 const autoCompleteJS = new autoComplete({
     placeHolder: "Search your address here ...",
     threshold: 5,
@@ -104,16 +95,13 @@ const autoCompleteJS = new autoComplete({
     data: {
         src: async (query) => {
             try {
-                // Fetch Data from external Source
-                const source = await fetch(`https://www.postalcode.lk/api/v2/locations?search=${query}`);
-                // Data should be an array of `Objects` or `Strings`
-                const data = await source.json();
+                const response = await fetch(`https://www.postalcode.lk/api/v2/locations?search=${query}`);
+                const data = await response.json();
                 return data;
             } catch (error) {
                 return error;
             }
         },
-        // Data source 'Object' key to be searched
         keys: ["location"],
     },
     resultItem: {
@@ -122,21 +110,16 @@ const autoCompleteJS = new autoComplete({
     resultsList: {
         element: (list, data) => {
             if (!data.results.length) {
-                // Create "No Results" message list element
                 const message = document.createElement("div");
                 message.setAttribute("class", "no_result");
-                // Add message text content
-                message.innerHTML = `<span><p>Your searched address "${data.query}" is not available. Would you like to request now?</p><a id="btnPCRequest" tabindex="1" onclick="hideMessage()" class="btn btn-primary" href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;padding:2px;min-width:100px;height:30px">Yes</a> </span>`;
-                // Add message list element to the list
+                message.style.overflow = "hidden";
+                message.innerHTML = `
+                    <span>
+                        <p>Your searched address "${data.query}" is not available. Would you like to request now?</p>
+                        <a id="btnPCRequest" tabindex="1" onclick="hideMessage()" class="btn btn-primary" href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;padding:2px;min-width:100px;height:30px">Yes</a>
+                    </span>`;
                 list.appendChild(message);
-               // $("#btndivform").hide();
-                //const bsCollapse = new bootstrap.Collapse('#pcrequest', {
-                //    show: true
-                //})
-               
                 $('#btnPCRequest').focus();
-            
-
             }
         },
         noResults: true,
@@ -144,38 +127,36 @@ const autoCompleteJS = new autoComplete({
     events: {
         input: {
             selection: (event) => {
-                const selection = event.detail.selection.value.location;
-                let latLng = event.detail.selection.value.lat_long;
-                document.getElementById('lat_long').value = latLng;
-                autoCompleteJS.input.value = selection;
-                setMarker(latLng, 18, selection);
-                document.getElementById('address').value = selection;
-                //const [lat, lng] = latLng.split(',');
-                //getAddressFromCoordinates(lat, lng, marker);
+                const { location, lat_long } = event.detail.selection.value;
+                document.getElementById('lat_long').value = lat_long;
+                autoCompleteJS.input.value = location;
+                setMarker(lat_long, 18, location);
+                document.getElementById('address').value = location;
             },
         },
     },
 });
 
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+// Form validation setup
 (() => {
-    'use strict'
+    'use strict';
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
+    const forms = document.querySelectorAll('.needs-validation');
 
-    // Loop over them and prevent submission
     Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {
             if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
+                event.preventDefault();
+                event.stopPropagation();
             }
 
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+
+
+// Function to handle form submission
 function send(e, form) {
     if (!form.checkValidity()) {
         showAlerts('fail',  'Please fill the missing values before submit.');
@@ -216,53 +197,90 @@ function send(e, form) {
     }
 
 }
-function showAlerts(type, message) {
-    if (type == "success") {
-        document.getElementById('notification').classList.add('alert-success');
 
-    } else if (type == "fail") {
-        document.getElementById('notification').classList.add('alert-danger');
-        type = "";
-    }
-    else {
-        document.getElementById('notification').classList.add('alert-primary');
-    }
-    document.getElementById("notification").innerHTML = message;
-    document.getElementById('notification').style.display = 'block';
-    setTimeout(function () { document.getElementById('notification').style.display = 'none' }, 5000);
 
+
+// Function to show alert messages
+function showAlert(type, message) {
+    const notification = document.getElementById('notification');
+    notification.className = 'alert';
+    notification.classList.add(type === 'success' ? 'alert-success' : 'alert-danger');
+    notification.innerHTML = message;
+    notification.style.display = 'block';
+    setTimeout(() => { notification.style.display = 'none'; }, 5000);
 }
 
+// Check if URL has 'locate' parameter and set marker accordingly
 const urlParams = new URLSearchParams(window.location.search);
-if(urlParams.has('locate')){
+if (urlParams.has('locate')) {
     const postcode = urlParams.get('locate');
-    $lat_long=locate(postcode);
-    console.log(postcode);
+    locate(postcode);
 }
 
-function locate(postcode){
-    fetch("https://www.postalcode.lk/api/v2/locate?postcode="+postcode)
-    .then((response) => response.json())
-    .then((json) => {
-        if(json){
-            setMarker(json.lat_long, 14, "<b>"+json.customer+"</b></br>"+json.address);
-        }else{
-            
-        }
-        
-    })
-    .catch(error => {
-        console.error('Error fetching postcode:', error);
-    });
+// Function to locate postcode and set marker
+function locate(postcode) {
+    fetch(`https://www.postalcode.lk/api/v2/locate?postcode=${postcode}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                setMarker(data.lat_long, 14, `<b>${data.customer}</b><br>${data.address}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching postcode:', error);
+        });
 }
-document.body.addEventListener("click", function (evt) {
-    //console.dir(this);
-    //note evt.target can be a nested element, not the body element, resulting in misfires
-    //console.log(evt.target);
+
+// Close popup on body click
+document.body.addEventListener("click", () => {
     map.closePopup();
-},true);
+}, true);
 
-function hideMessage(){
-    $(".no_result").hide();
+// Function to hide 'No Results' message
+function hideMessage() {
+    document.querySelector(".no_result").style.display = 'none';
 }
-$("#infopanel").scrollTop($("#infopanel")[0].scrollHeight);
+
+// Copy share link to clipboard
+document.getElementById('copyButton').addEventListener('click', () => {
+    const copyText = document.getElementById('shareLink');
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+
+    navigator.clipboard.writeText(copyText.value).then(() => {
+        alert(`Copied the text: ${copyText.value}`);
+    }, (err) => {
+        console.error('Failed to copy text: ', err);
+    });
+});
+
+// Add event listener to the "Yes" button
+document.getElementById('btnPCRequest').addEventListener('click', function() {
+    // Add class to enable scrolling and expand height
+    document.getElementById('pcrequest').classList.add('expanded');
+});
+// Add event listener for the "Track Location" button
+document.getElementById('nav-track-location').addEventListener('click', trackLocation);
+
+// Function to track live location
+function trackLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(onLiveLocationSuccess, onLiveLocationError, { enableHighAccuracy: true });
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+}
+
+// Live location success callback
+function onLiveLocationSuccess(position) {
+    const { latitude, longitude } = position.coords;
+    setMarkerPosition(latitude, longitude, marker);
+    map.setView([latitude, longitude], 13);
+    document.getElementById('lat_long').value = `${latitude},${longitude}`;
+}
+
+// Live location error callback
+function onLiveLocationError(error) {
+    console.log("Error getting live location:", error.message);
+}
+

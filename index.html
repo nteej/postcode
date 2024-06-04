@@ -19,17 +19,25 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+  
 </head>
 
 <body>
+  <header id="page-header">
+    <div class="header-content">
+        <h1>Postcode.lk</h1>
+    </div>
+</header>
   <div class="panel" id="infopanel">
     <div class="accordion" id="accordionExample">
+      
       <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
+        <!-- <h2 class="accordion-header" id="headingOne">
           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            <label><img src="./resources/images/logo.png" style="height: 20px;">postcode.lk</label>
+            <label><img src="./resources/images/logo.png" style="height: 30px;">postcode.lk</label>
           </button>
-        </h2>
+        </h2> -->
         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <nav>
@@ -54,17 +62,32 @@
                     <div id="notification" class="alert" role="alert" style="display:none"></div>
                     <div class="collapse" id="pcrequest">
                       <hr class="hr" />
-                      <div class="mb-3">
-                        <label for="contact" class="form-label">Contact No or Email</label>
-                        <input type="text" class="form-control" id="contact" name="contact"
-                          placeholder="0771234567 or yournname@gmail.com" required>
-                        <div class="valid-feedback">
-                          Looks good!
+                      <div class="row g-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please provide a valid email address.
+                            </div>
                         </div>
-                        <div class="invalid-feedback">
-                          Please type your name or location name
+                        <div class="col-md-6 mb-3">
+                            <label for="contact" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="contact" name="contact" placeholder="0771234567" pattern="[0-9]{10}">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Please provide a valid contact number.
+                            </div>
                         </div>
-                      </div>
+                    </div>
+                    
+                    
+                    
+                    
                       <div class="mb-3">
                         <label for="customer" class="form-label">Your Name</label>
                         <input type="text" class="form-control" id="customer" name="customer"
@@ -115,12 +138,14 @@
                 </div>
               </div>
               <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
-                <div class="container-fluid">
-                  <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">This is an example of what you'll share</label>
-                    <input type="text" class="form-control" id="customer" name="customer"
-                      value="https://www.postcode.lk?locate=KT2 1DG" >
-                  </div>
+                <div class="container-fluid no_result">
+                <label for="exampleFormControlInput1" class="form-label">This is an example of what you'll share</label>
+                <div class="input-group mb-3">
+                     <input type="text" class="form-control" id="shareLink" name="customer" value="https://www.postcode.lk?locate=KT2 1DG">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="copyButton">Copy</button>
+                </div>
+                </div>
                 </div>
               </div>
               <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
@@ -137,11 +162,15 @@
     
     
     <div  id="info">
+            <!-- Add a new button for live location tracking -->
+        <button class="nav-link" id="nav-track-location" type="button" role="tab" aria-controls="nav-track-location" aria-selected="false">Track Location</button>
+
       <input id="latitude" type="hidden" />
       <input id="longitude" type="hidden" />
     </div>
-    
+
   </div>
+
   <div id="map"></div>
   <!-- Make sure you put this AFTER Leaflet's CSS -->
 
