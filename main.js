@@ -154,8 +154,6 @@ const autoCompleteJS = new autoComplete({
         }, false);
     });
 })();
-
-
 // Function to handle form submission
 function send(e, form) {
     if (!form.checkValidity()) {

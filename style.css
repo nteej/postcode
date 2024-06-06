@@ -69,18 +69,17 @@ input:hover::placeholder, textarea:hover::placeholder {
 }
 
 .tab-pane {
-    height: 200px; /* Adjust the height as needed */
+    height: 200px; 
     width: 400px;
-    overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
-}
+    overflow-y: auto; }
 
 .expanded {
     overflow-y: scroll;
-    max-height: 400px; /* Adjust height as needed */
+    max-height: 400px; 
 }
 
 .expanded .tab-pane {
-    height: auto; /* Set height to auto to allow expansion */
+    height: auto; 
 }
 
 .accordion-body {
@@ -96,7 +95,6 @@ input:hover::placeholder, textarea:hover::placeholder {
     background-color: #f8f9fa;
     margin-top: 10px;
 }
-
 .no_result label {
     margin: 0;
     font-size: 16px;
