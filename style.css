@@ -12,116 +12,134 @@ body,
     width: 100%;
 }
 
+header#page-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    z-index: 1000;
+    padding: 10px 20px; /* Padding for spacing */
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 26px;
+    color: #333; /* Darker text color */
+    font-weight: 600; /* Bold font */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+}
+
+.header-logo {
+    height: 40px; /* Adjust the logo size as needed */
+}
+
 .panel {
     position: fixed;
-    margin-top: 1%;
+    margin-top: 70px; /* Adjust for header height */
     margin-left: 1%;
     background-color: white;
     z-index: 1000;
     padding: 1rem;
     border-radius: 16px;
-    overflow-y: scroll;
     min-height: 300px;
     max-height: 500px;
 }
 
-input::placeholder {
-    color: rgb(153, 155, 154)!important;
-    transition: all .3s ease;
-    -webkit-transition: all -webkit-transform .3s ease;
-
-}
-textarea::placeholder {
-    color: rgb(142, 141, 141)!important;
-    transition: all .3s ease;
-    -webkit-transition: all -webkit-transform .3s ease;
-
+.card-text {
+    font-size: 12px;
 }
 
-input:hover::placeholder {
-    color: rgb(191, 190, 190)!important;
-    transition: all .3s ease;
-    -webkit-transition: all -webkit-transform .3s ease;
+input::placeholder, textarea::placeholder {
+    color: rgb(153, 155, 154) !important;
+    transition: all 0.3s ease;
 }
-textarea:hover::placeholder {
-    color: rgb(191, 190, 190)!important;
-    transition: all .3s ease;
-    -webkit-transition: all -webkit-transform .3s ease;
+
+input:hover::placeholder, textarea:hover::placeholder {
+    color: rgb(191, 190, 190) !important;
+    transition: all 0.3s ease;
 }
 
 .not-found {
-
     height: 20px;
 }
 
+.tab-pane {
+    height: 200px; 
+    width: 400px;
+    overflow-y: auto; }
+
+.expanded {
+    overflow-y: scroll;
+    max-height: 400px; 
+}
+
+.expanded .tab-pane {
+    height: auto; 
+}
+
+.accordion-body {
+    overflow: hidden;
+}
+
+.no_result {
+    display: block;
+    white-space: normal;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    margin-top: 10px;
+}
+.no_result label {
+    margin: 0;
+    font-size: 16px;
+}
+
+.no_result input {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #d8e0f8;
+   
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+.no_result button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
 #pcformrequest {
     max-width: 390px;
     font-size: 13px;
     font-weight: 500;
-    overflow-y: scroll;
 }
 
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-
-    /* Your styles for extra small screens go here */
-    #pcformrequest {
-        max-width: 19rem;
-    }
-
-    .panel {
-        margin-top: 5%;
-        margin-left: 25%;
-    }
+#nav-track-location {
+    background-color: #007bff; /* Blue color for the button */
+    color: #fff; /* White text color */
+    border: none; /* No border */
+    padding: 0.5rem 1rem; /* Padding for button */
+    margin-right: 10px; /* Spacing between buttons */
+    border-radius: 0.25rem; /* Rounded corners */
+    cursor: pointer; /* Cursor style */
 }
 
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-
-    /* Your styles for extra small screens go here */
-    #pcformrequest {
-        max-width: 20rem;
-    }
-
-    .panel {
-        margin-top: 5%;
-        margin-left: 10%;
-    }
+#nav-track-location:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 601px) and (max-width: 768px) {
-
-    /* Your styles for small screens go here */
-    #pcformrequest {
-        max-width: 19rem;
-    }
-
-    .panel {
-        margin-top: 5%;
-        margin-left: 15%;
-    }
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 769px) and (max-width: 992px) {
-    /* Your styles for medium screens go here */
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 993px) and (max-width: 1200px) {
-    /* Your styles for large screens go here */
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1201px) {
-
-    /* Your styles for extra large screens go here */
-    .panel {
-        position: fixed;
-        margin-top: 2%;
-        margin-left: 2%;
-    }
+#nav-track-location:focus {
+    outline: none; /* Remove focus outline */
 }
 
 .btn-primary {
@@ -139,4 +157,43 @@ textarea:hover::placeholder {
     --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: #c2a8e5 !important;
     --bs-btn-disabled-border-color: #c2a8e5 !important;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 600px) {
+    #pcformrequest {
+        max-width: 19rem;
+    }
+    .panel {
+        margin-top: 5%;
+        margin-left: 10%;
+    }
+  
+}
+
+@media only screen and (min-width: 601px) and (max-width: 768px) {
+    #pcformrequest {
+        max-width: 19rem;
+    }
+    .panel {
+        margin-top: 5%;
+        margin-left: 15%;
+    }
+   
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+   
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel {
+        position: fixed;
+        margin-top: 6%;
+        margin-left: 2%;
+    }
 }

@@ -1,5 +1,6 @@
 
 var baseurl = "http://localhost:4000/";
+// Initialize the Leaflet map
 var map = L.map('map', {
     center: [6.8711724, 79.9237776],
     zoom: 13,
@@ -8,7 +9,7 @@ var map = L.map('map', {
 });
 var nzoom = 12;
 
-
+// Add Google Maps tile layer
 L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
     maxZoom: 20,
     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
@@ -19,11 +20,12 @@ L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
 L.control.scale({ position: 'bottomleft' }).addTo(map);
-
+// Define the marker icon
 var postcode = L.icon({
     iconUrl: './favicon.ico',
     iconSize: [50, 50]
 });
+// Initialize the marker
 var marker = L.marker([6.8711724, 79.9237776], {
     icon: postcode,
     draggable: true
@@ -42,12 +44,7 @@ navigator.geolocation.getCurrentPosition(function (position) {
         console.log("Location permission not allowed.");
 });
 
-
-
-//L.circle([6.8711724, 79.9237776],{radius:100}).addTo(map);
-//var intimessage = "Drag me to position your address with coordination.";
-//marker.bindPopup(intimessage).openPopup();
-
+// Handle marker drag end event
 marker.on('dragend', function (e) {
     console.log(marker);
     var lat = marker.getLatLng().lat;//.toFixed(8);
@@ -64,7 +61,7 @@ marker.on('dragend', function (e) {
 
 
 });
-
+// Function to set marker position and update the map view
 function setMarker(latLng, zoom, intimessage) {
     // Split the string into an array using the comma as a separator
     const [latitude, longitude] = latLng.split(',');
@@ -94,6 +91,7 @@ function getAddressFromCoordinates(lat, lng, marker) {
             console.error('Error fetching address:', error);
         });
 }
+// Initialize autocomplete for address search
 const autoCompleteJS = new autoComplete({
     placeHolder: "Search your address here ...",
     threshold: 5,
@@ -157,7 +155,7 @@ const autoCompleteJS = new autoComplete({
     },
 });
 
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+// Form validation setup
 (() => {
     'use strict'
 
@@ -176,6 +174,7 @@ const autoCompleteJS = new autoComplete({
         }, false)
     })
 })()
+// Function to handle form submission
 function send(e, form) {
     if (!form.checkValidity()) {
         showAlerts('fail',  'Please fill the missing values before submit.');
@@ -193,12 +192,15 @@ function send(e, form) {
             .then((json) => {
                 console.log(json.id);
                 if (json.data.id > 0) {
+                    
                     showAlerts('success', 'New PostCode requested sucessfully.Your registered postcode will be available with 5 working days.');
                     form.reset();
                     form.classList.remove('was-validated');
                     // document.getElementById("address").value='';
                     // document.getElementById("customer").value='';
                     // document.getElementById("lat_long").value='';
+                    // Scroll to the top of the form after successful submission
+                    scrollToTopRepeatedly(3);
                 }
 
             })
@@ -214,8 +216,20 @@ function send(e, form) {
 
         e.preventDefault();
     }
+    function scrollToTopRepeatedly(times) {
+        let count = 0;
+        function scroll() {
+            if (count < times) {
+                document.getElementById('pcformrequest').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                count++;
+                setTimeout(scroll, 500); // Adjust timeout as needed to ensure smooth scrolling
+            }
+        }
+        scroll();
+    }
 
 }
+// Function to show alert messages
 function showAlerts(type, message) {
     if (type == "success") {
         document.getElementById('notification').classList.add('alert-success');
@@ -239,7 +253,7 @@ if(urlParams.has('locate')){
     $lat_long=locate(postcode);
     console.log(postcode);
 }
-
+// Check if URL has 'locate' parameter and set marker accordingly
 function locate(postcode){
     fetch("https://www.postalcode.lk/api/v2/locate?postcode="+postcode)
     .then((response) => response.json())
@@ -261,8 +275,20 @@ document.body.addEventListener("click", function (evt) {
     //console.log(evt.target);
     map.closePopup();
 },true);
-
+// Function to hide 'No Results' message
 function hideMessage(){
     $(".no_result").hide();
 }
 $("#infopanel").scrollTop($("#infopanel")[0].scrollHeight);
+// Copy share link to clipboard
+document.getElementById('copyButton').addEventListener('click', () => {
+    const copyText = document.getElementById('shareLink');
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+
+    navigator.clipboard.writeText(copyText.value).then(() => {
+        alert(`Copied the text: ${copyText.value}`);
+    }, (err) => {
+        console.error('Failed to copy text: ', err);
+    });
+});
