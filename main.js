@@ -37,6 +37,11 @@ navigator.geolocation.getCurrentPosition(function (position) {
     marker.setLatLng([latitude, longitude])
     map.setView([latitude, longitude], 13)
     document.getElementById('lat_long').value = latitude + ',' + longitude;
+    // Show Google Maps button and set URL for current location
+    const latLng = latitude + ',' + longitude;
+    $("#google-map").attr("href", "https://www.google.com/maps/dir/?api=1&destination="+latLng);
+    $("#google-map").show();
+    $("#navigate").attr("href","https://www.google.com/maps/dir/?api=1&destination="+latLng);
    // document.getElementById('address').value = latitude + ',' + longitude;
     //console.log(marker);
 }, function (error) {
@@ -56,6 +61,11 @@ marker.on('dragend', function (e) {
     document.getElementById('latitude').value = lat;
     document.getElementById('longitude').value = lng;
     document.getElementById('lat_long').value = lat + ',' + lng;
+    // Show Google Maps button and set URL for dragged location
+    const latLng = lat + ',' + lng;
+    $("#google-map").attr("href", "https://www.google.com/maps/dir/?api=1&destination="+latLng);
+    $("#google-map").show();
+    $("#navigate").attr("href","https://www.google.com/maps/dir/?api=1&destination="+latLng);
     getAddressFromCoordinates(lat, lng, marker);
 
 
@@ -66,6 +76,7 @@ function setMarker(latLng, zoom, intimessage) {
     // Split the string into an array using the comma as a separator
     const [latitude, longitude] = latLng.split(',');
     $("#google-map").attr("href", "https://www.google.com/maps/dir/?api=1&destination="+latLng);
+    $("#google-map").show(); // Show the Google Maps button when a location is selected
     $("#navigate").attr("href","https://www.google.com/maps/dir/?api=1&destination="+latLng);
     // Convert the values to numbers if needed
     const lat = parseFloat(latitude);
@@ -91,69 +102,124 @@ function getAddressFromCoordinates(lat, lng, marker) {
             console.error('Error fetching address:', error);
         });
 }
-// Initialize autocomplete for address search
-const autoCompleteJS = new autoComplete({
-    placeHolder: "Search your address here ...",
-    threshold: 5,
-    resultsList: {
-        maxResults: 10,
-        noResults: true,
-    },
-    data: {
-        src: async (query) => {
-            try {
-                // Fetch Data from external Source
-                const source = await fetch(`https://www.postalcode.lk/api/v2/locations?search=${query}`);
-                // Data should be an array of `Objects` or `Strings`
-                const data = await source.json();
-                return data;
-            } catch (error) {
-                return error;
-            }
-        },
-        // Data source 'Object' key to be searched
-        keys: ["location"],
-    },
-    resultItem: {
-        highlight: true,
-    },
-    resultsList: {
-        element: (list, data) => {
-            if (!data.results.length) {
-                // Create "No Results" message list element
-                const message = document.createElement("div");
-                message.setAttribute("class", "no_result");
-                // Add message text content
-                message.innerHTML = `<span><p>Your searched address "${data.query}" is not available. Would you like to request now?</p><a id="btnPCRequest" tabindex="1" onclick="hideMessage()" class="btn btn-primary" href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;padding:2px;min-width:100px;height:30px">Yes</a> </span>`;
-                // Add message list element to the list
-                list.appendChild(message);
-               // $("#btndivform").hide();
-                //const bsCollapse = new bootstrap.Collapse('#pcrequest', {
-                //    show: true
-                //})
-               
-                $('#btnPCRequest').focus();
-            
+// Google Places Autocomplete variables
+let autocomplete;
 
-            }
+// Initialize Google Places Autocomplete
+function initAutocomplete() {
+    const input = document.getElementById('autoComplete');
+    
+    // Create the autocomplete object
+    autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ['establishment', 'geocode'],
+        fields: ['place_id', 'geometry', 'name', 'formatted_address']
+    });
+
+    // Remove Google attribution after autocomplete is initialized
+    setTimeout(() => {
+        hideAttributionElements(document);
+    }, 100);
+
+    // Listen for place selection
+    autocomplete.addListener('place_changed', function() {
+        const place = autocomplete.getPlace();
+        
+        if (!place.geometry || !place.geometry.location) {
+            // User didn't select a place from the dropdown
+            console.log("No details available for input: '" + place.name + "'");
+            
+            // Fall back to the original autocomplete implementation
+            initOriginalAutocomplete();
+            return;
+        }
+
+        // Get coordinates
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const latLng = `${lat},${lng}`;
+        
+        // Update form values
+        document.getElementById('lat_long').value = latLng;
+        document.getElementById('address').value = place.formatted_address || place.name;
+        
+        // Update map
+        setMarker(latLng, 18, place.formatted_address || place.name);
+        
+        console.log('Google Places result:', place);
+    });
+
+    // Set placeholder
+    input.placeholder = "Search your address here with Google Places...";
+}
+
+// Initialize the original autocomplete as fallback
+function initOriginalAutocomplete() {
+    // Initialize autocomplete for address search (original implementation)
+    const autoCompleteJS = new autoComplete({
+        placeHolder: "Search your address here ...",
+        threshold: 5,
+        resultsList: {
+            maxResults: 10,
+            noResults: true,
         },
-        noResults: true,
-    },
-    events: {
-        input: {
-            selection: (event) => {
-                const selection = event.detail.selection.value.location;
-                let latLng = event.detail.selection.value.lat_long;
-                document.getElementById('lat_long').value = latLng;
-                autoCompleteJS.input.value = selection;
-                setMarker(latLng, 18, selection);
-                document.getElementById('address').value = selection;
-                //const [lat, lng] = latLng.split(',');
-                //getAddressFromCoordinates(lat, lng, marker);
+        data: {
+            src: async (query) => {
+                try {
+                    // Fetch Data from external Source
+                    const source = await fetch(`https://www.postalcode.lk/api/v2/locations?search=${query}`);
+                    // Data should be an array of `Objects` or `Strings`
+                    const data = await source.json();
+                    return data;
+                } catch (error) {
+                    return error;
+                }
+            },
+            // Data source 'Object' key to be searched
+            keys: ["location"],
+        },
+        resultItem: {
+            highlight: true,
+        },
+        resultsList: {
+            element: (list, data) => {
+                if (!data.results.length) {
+                    // Create "No Results" message list element
+                    const message = document.createElement("div");
+                    message.setAttribute("class", "no_result");
+                    // Add message text content
+                    message.innerHTML = `<span><p>Your searched address "${data.query}" is not available. Would you like to request now?</p><a id="btnPCRequest" tabindex="1" onclick="hideMessage()" class="btn btn-primary" href="#pcrequest" data-bs-toggle="collapse" style="margin-left:10px;padding:2px;min-width:100px;height:30px">Yes</a> </span>`;
+                    // Add message list element to the list
+                    list.appendChild(message);
+                   // $("#btndivform").hide();
+                    //const bsCollapse = new bootstrap.Collapse('#pcrequest', {
+                    //    show: true
+                    //})
+                   
+                    $('#btnPCRequest').focus();
+                
+
+                }
+            },
+            noResults: true,
+        },
+        events: {
+            input: {
+                selection: (event) => {
+                    const selection = event.detail.selection.value.location;
+                    let latLng = event.detail.selection.value.lat_long;
+                    document.getElementById('lat_long').value = latLng;
+                    autoCompleteJS.input.value = selection;
+                    setMarker(latLng, 18, selection);
+                    document.getElementById('address').value = selection;
+                    //const [lat, lng] = latLng.split(',');
+                    //getAddressFromCoordinates(lat, lng, marker);
+                },
             },
         },
-    },
-});
+    });
+    
+    return autoCompleteJS;
+}
 
 // Form validation setup
 (() => {
@@ -292,3 +358,59 @@ document.getElementById('copyButton').addEventListener('click', () => {
         console.error('Failed to copy text: ', err);
     });
 });
+
+// Ensure Google Maps button is hidden on page load
+$(document).ready(function() {
+    $("#google-map").hide();
+    
+    // Remove Google attribution from autocomplete dropdown
+    removeGoogleAttribution();
+});
+
+// Function to remove Google attribution elements
+function removeGoogleAttribution() {
+    // Set up a mutation observer to catch dynamically added attribution
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) { // Element node
+                    hideAttributionElements(node);
+                }
+            });
+        });
+    });
+    
+    // Start observing
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    
+    // Initial cleanup
+    hideAttributionElements(document);
+}
+
+// Function to hide attribution elements
+function hideAttributionElements(container) {
+    // Hide various Google attribution elements
+    const selectors = [
+        '.pac-logo',
+        '.pac-footer',
+        'div[title*="Powered by Google"]',
+        'a[href*="maps.google.com/local_url"]',
+        'img[src*="powered"]',
+        'img[alt*="Google"]',
+        '.pac-container a[href*="google.com"]',
+        '.pac-container div[role="img"]'
+    ];
+    
+    selectors.forEach(selector => {
+        const elements = container.querySelectorAll ? container.querySelectorAll(selector) : [];
+        elements.forEach(element => {
+            element.style.display = 'none';
+            element.style.visibility = 'hidden';
+            element.style.height = '0';
+            element.style.overflow = 'hidden';
+        });
+    });
+}

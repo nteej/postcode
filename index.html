@@ -146,7 +146,7 @@
               <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
                 <a style="margin-top: 10px;" class="btn btn-primary" href="https://www.postalcode.lk/" target="_blank" title="Create your own route plan">Create a route</i>
                 </a>
-                <a style="margin-top: 10px;" class="btn btn-primary" id="google-map" href="#" target="_blank" title="Click here to navigate to the selected address">Google Maps</i>
+                <a style="margin-top: 10px; display: none;" class="btn btn-primary" id="google-map" href="#" target="_blank" title="Click here to navigate to the selected address">Google Maps</i>
                 </a>
                 
               </div>
@@ -176,6 +176,8 @@
 			  src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
 			  integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
 			  crossorigin="anonymous"></script>
+  <!-- Google Places API v2 -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzBJGU7CpogIUEwW01ZaHqSLVlVC2nXF4&libraries=places&callback=initAutocomplete"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
   <script src="./main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

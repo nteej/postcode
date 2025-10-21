@@ -197,3 +197,148 @@ input:hover::placeholder, textarea:hover::placeholder {
         margin-left: 2%;
     }
 }
+
+/* Google Places Autocomplete Styling */
+.pac-container {
+    z-index: 10000 !important; /* Ensure dropdown appears above all elements */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e5e9;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+.pac-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f3f4;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.pac-item:hover,
+.pac-item-selected {
+    background-color: #f8f9fa;
+}
+
+.pac-item:last-child {
+    border-bottom: none;
+}
+
+.pac-icon {
+    margin-right: 12px;
+}
+
+.pac-item-query {
+    font-weight: 500;
+    color: #202124;
+}
+
+.pac-matched {
+    font-weight: 700;
+    color: #1a73e8;
+}
+
+/* Hide Google attribution and branding */
+.pac-logo,
+.pac-logo:after,
+.pac-container:after,
+.pac-container .pac-logo,
+.pac-container .hdpi.pac-logo,
+.pac-container .pac-logo.hdpi {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Hide "Powered by Google" text elements */
+.pac-container .pac-item .pac-icon-marker:after,
+.pac-container .pac-item:after,
+.pac-container:after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Remove any Google branding containers */
+div[style*="background-image"][style*="poweredby"],
+div[title*="Powered by Google"],
+a[href*="maps.google.com/local_url"],
+.pac-container .pac-footer {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Additional attribution hiding rules */
+.pac-container img[src*="powered"],
+.pac-container img[alt*="Google"],
+.pac-container a[href*="google.com"],
+.pac-container div[role="img"],
+.pac-container .pac-foot,
+.pac-container [style*="powered"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Ensure clean container appearance */
+.pac-container {
+    padding-bottom: 0 !important;
+}
+
+.pac-container .pac-item:last-child {
+    margin-bottom: 0 !important;
+    border-bottom: none !important;
+}
+
+/* Enhanced autocomplete input styling for Google Places */
+#autoComplete {
+    position: relative;
+    z-index: 1;
+}
+
+/* Ensure Google Places dropdown has proper positioning */
+.autoComplete_wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+/* Override any conflicting styles for Google Places */
+.pac-container .pac-item {
+    line-height: 1.4;
+    text-align: left;
+}
+
+.pac-container .pac-item .pac-item-query {
+    font-size: 16px;
+}
+
+.pac-container .pac-item .pac-matched {
+    background-color: transparent;
+    color: #1a73e8;
+    font-weight: bold;
+}
+
+/* Google Maps button styling with smooth transition */
+#google-map {
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+
+#google-map:not([style*="display: none"]) {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
